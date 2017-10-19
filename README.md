@@ -204,7 +204,11 @@ is used by `video.py` to create a chronological video of the agent driving.
     with the data shuffle. It doesnt train correctly, the loss after first epoch
     stabilize and doesnt go low.
 
--   `data`
+-   `test_images folder`
+
+    Here I have two images, used to visualize the Model after been trained
+
+-   `data folder`
 
     Local data folder **not** synchronized with GitHub.
 

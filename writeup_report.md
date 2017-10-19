@@ -156,6 +156,9 @@ Lets riassume the **data preparation** steps:
 
 -   Resizing the images down to **128x128**
 
+-   Image cropping to eliminate the front of the car and the upper part of the
+    image ( cloud, trees... )
+
 -   Putting the **Center image** with the steering angle, the **left **image
     with steering corrected by a + factor ( see in the code ), the **right
     **image corrected by a -factor ( see in the code ) in a **Pytable for Big
@@ -287,11 +290,128 @@ Total validation samples 128x128 after augmentation and preprocessing : 95442
 
 Here you can see the training statistics:
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Epoch 1/10
+11930/11929 [==============================] - 165s - loss: 0.0262 - val_loss: 0.0150
+Epoch 2/10
+11930/11929 [==============================] - 148s - loss: 0.0220 - val_loss: 0.0158
+Epoch 3/10
+11930/11929 [==============================] - 151s - loss: 0.0233 - val_loss: 0.0176
+Epoch 4/10
+11930/11929 [==============================] - 145s - loss: 0.0232 - val_loss: 0.0147
+Epoch 5/10
+11930/11929 [==============================] - 145s - loss: 0.0241 - val_loss: 0.0186
+Epoch 6/10
+11930/11929 [==============================] - 145s - loss: 0.0254 - val_loss: 0.0211
+Epoch 7/10
+11930/11929 [==============================] - 145s - loss: 0.0275 - val_loss: 0.0178
+Epoch 8/10
+11930/11929 [==============================] - 144s - loss: 0.3627 - val_loss: 0.0790
+Epoch 9/10
+11930/11929 [==============================] - 144s - loss: 0.0808 - val_loss: 0.0789
+Epoch 10/10
+11930/11929 [==============================] - 144s - loss: 0.3662 - val_loss: 0.0794
+
+Total number of train samples: 381744 ( shape 128x128)
+
+Batch Size                   : 32
+
+Duration                     : 0:24:41.647470
+  
+ .. model saved to model.h5 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+**The image below shows, that we need less than 10 epochs:**
+
+ 
+
+![](writeup_images/training stats.PNG)
+
+ 
+
  
 
  
 
-### **Consideration about Big Data on  GPU machine ( Gtx 1060 )**
+### **Trained model exploration**
+
+ 
+
+1.  Loading the model from disk:
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    print (" Loading drive.h5 .......")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    from keras.models import load_model
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    from keras.models import Model
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    modelobj = load_model('model.h5')
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    print (" ..... model model.h5 successfully loaded")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+1.  Loading test image:
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    image = cv2.imread('./test_images/center1.jpg')
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+1.  Check if the images are cropped correctly:
+
+![](writeup_images/keras cropping.PNG)
+
+1.  **First Layer ** - Conv Layer 5x5 , 24 filters  ( To see all the images go
+    please to **model.ipynb **)
+
+![](writeup_images/keras first layer.PNG)
+
+1.  **Second layer** - Conv Layer 5x5 , 36 filters ( To see all the images go
+    please to **model.ipynb **)
+
+![](writeup_images/keras second layer.PNG)
+
+1.  **Third Layer **- Conv Layer 5x5 , 48 filters ( To see all the images go
+    please to **model.ipynb **)
+
+![](writeup_images/keras layer 3.PNG)
+
+1.  **4th **Conv Layer 3x3 , 64 filters ( To see all the images go please to
+    **model.ipynb **)
+
+![](writeup_images/keras layer 4.PNG)
+
+1.  **5th** Conv Layer 3x3 , 64 filters ( To see all the images go please to
+    **model.ipynb **)
+
+![](writeup_images/keras layer 5.PNG)
+
+ 
+
+### **​Consideration about Big Data on  GPU machine ( Nvidia GTX 1060 )**
 
 The proposed in Udacity solution was too slow for training a lot of data.
 
@@ -370,6 +490,8 @@ Here you can see the Structure of **py_training_samples   **:
   chunkshape := (64000, 128, 128, 3)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ 
+
 #### 2. Introduce the **Asynchronous processing**
 
 So i have thought to build two separate process:
@@ -384,11 +506,11 @@ full, will wait until will be some space free.
 
  
 
-2- the second process , thats the training itself with Keras
+2- the second process , that’s the training itself with Keras
 
  
 
-This split allows to maximize the different Cpu cores, while Keras can do it
+This split allows to maximize the different CPU cores, while Keras can do it
 with the** workers=n.**
 
 Further, using a memory buffer it allows to optimize the data flush from SSD to
@@ -429,3 +551,65 @@ PART2](https://medium.com/@cristianzantedeschi/github-link-https-github-com-cris
 
 [Deep Learning . Training with Huge amount of data .
 PART3](https://medium.com/@cristianzantedeschi/deep-learning-training-with-huge-amount-of-data-part3-e4bf83ff8cc6)
+
+ 
+
+#### 4. What about shuffling the data ?
+
+Its important to note, that in the solutions before ( Udacity, shuffling the
+entire sample list , not the image array), or the big image array in memory, the
+shuffling was done in the **generator** at the** begin of each epoch**
+
+Because now I am reading data in chunk from disk, the generetor doesnt have all
+the data in hands, but only eventually this big chunk, or , in other words, the
+Python Queue.
+
+ 
+
+Because shuffling a Queue is a loss of performance ( very slow ), I had to
+transfer shuffling data into the Queue loader:
+
+1.  Queue loader reads a Big Chunk from Pytable ( from disk ):
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    chunk_batch_samples = samples[offset:offset+step]
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    chunk_batch_labels  = labels[offset:offset+step]
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+2.  **SHUFFLE using sklearn.utils.shuffle**
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    chunk_batch_samples, chunk_batch_labels = shuffle(chunk_batch_samples, chunk_batch_labels )
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+3.  Putting data into the Python Queue (maxsize = batch_size \*
+    queue_loader_chunk)
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    for sample, steering in zip ( chunk_batch_samples,chunk_batch_labels):
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          samples_q.put(sample)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          labels_q.put(steering)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+The Big Chunk ( the Queue size ) need **to be big enough**
+
+1.  to increase the performance
+
+2.  not too big ( RAM memory limitations )
+
+3.  need to shuffle as many data as possible ( to avoid repeating training on
+    same data )
+
+    Obiously the best shuffle is done on the entire dataset, but **in this Big
+    Data solution is not possible.**
