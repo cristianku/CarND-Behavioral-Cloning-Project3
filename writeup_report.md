@@ -65,10 +65,8 @@ the model, and it contains comments to explain how the code works.
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network “Nvidia like” with 3x3 and 5x5
-filter sizes
-
- 
+My model consists of a convolution neural network **“Nvidia like”** with 3x3 and
+5x5 filter sizes
 
 The model includes ELU layers to introduce nonlinearity, and the data is
 normalized in the model using a Keras lambda layer (lambda x: x/127.5 - 1 ).
@@ -124,6 +122,8 @@ simulator and ensuring that the vehicle could stay on the track.
 #### 3. Model parameter tuning
 
 The model used an adam optimizer, so the learning rate was not tuned manually .
+
+ 
 
 #### 4. Appropriate training data
 
@@ -253,7 +253,9 @@ the lane:
 
 ![](writeup_images/center_2017_10_19_15_11_07_780.jpg)
 
-![alt text](writeup_images/center_2017_10_19_15_11_09_579.jpg)
+![](writeup_images/center_2017_10_19_15_11_09_579.jpg)
+
+ 
 
 Then I repeated this process on track two in order to get more data points.
 
@@ -261,6 +263,31 @@ To augment the data sat, I also flipped images and angles thinking that this
 would ... For example, here is an image that has then been flipped:
 
 ![](writeup_images/flipped.jpg)
+
+ 
+
+#### 3. Dataset exploration 
+
+ 
+
+![](writeup_images/exploring dataset.PNG)
+
+I have a lot of train samples, ( please refer to Big Data consideration below )
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Total training samples 128x128 after augmentation and preprocessing : 381744 
+
+Total validation samples 128x128 after augmentation and preprocessing : 95442 
+... completed
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#### 4. Training
+
+Here you can see the training statistics:
+
+ 
 
  
 
@@ -351,8 +378,9 @@ So i have thought to build two separate process:
 64000 images per time, into a Memory buffer ( a python Queue ). I use
 **multiprocessing.Process** class.
 
-The great thing about Python Queue is that , if we define the maxsize, the put
-instruction in case the Queue is full, will wait until will be some space free.
+The great thing about Python Queue is that , if we define the **maxsize
+(batch_size \* queue_loader_chunk)**, the put instruction in case the Queue is
+full, will wait until will be some space free.
 
  
 
