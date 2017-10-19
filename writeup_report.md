@@ -129,7 +129,8 @@ The model used an adam optimizer, so the learning rate was not tuned manually .
 
 Training data was chosen to keep the vehicle driving on the road. I used a
 combination of center lane driving, recovering from the left and right sides of
-the road. And I have also used the Track2
+the road. And I have also used the Track2 to sample data.
+Very important was to train the vehicle to recover from the side to the center.
 
  
 
@@ -196,7 +197,7 @@ for i,line in enumerate(samples_list):
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      samples_list_recurrent.append([samples_list[ix][0] ,samples_list[ix][1] ,samples_list[ix][2] ,line[3]]) 
+      samples_list_recurrent.append([samples_list[ix][0] ,samples_list[ix][1] ,samples_list[ix][2] ,line[3]])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -269,7 +270,7 @@ would ... For example, here is an image that has then been flipped:
 
  
 
-#### 3. Dataset exploration 
+#### 3. Dataset exploration
 
  
 
@@ -280,9 +281,9 @@ I have a lot of train samples, ( please refer to Big Data consideration below )
  
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Total training samples 128x128 after augmentation and preprocessing : 381744 
+Total training samples 128x128 after augmentation and preprocessing : 381744
 
-Total validation samples 128x128 after augmentation and preprocessing : 95442 
+Total validation samples 128x128 after augmentation and preprocessing : 95442
 ... completed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -317,8 +318,8 @@ Total number of train samples: 381744 ( shape 128x128)
 Batch Size                   : 32
 
 Duration                     : 0:24:41.647470
-  
- .. model saved to model.h5 
+
+ .. model saved to model.h5
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
