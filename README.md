@@ -9,9 +9,13 @@ Overview
 I have build a Convolutional Neural Network and Neural network to clone driving
 behavior.
 
-I have trained, validated and tested the model using Keras.
+ 
 
-The model will output a steering angle to an autonomous vehicle.
+I have trained, validated and tested the model using Keras and Tensorflow.
+
+ 
+
+My model model will output a steering angle to an autonomous vehicle.
 
  
 
@@ -22,6 +26,8 @@ For the data collection I have used a simulator provided by Udacity:
 -   [macOS](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4594_mac-sim.app/mac-sim.app.zip)
 
 -   [Windows](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4419_windows-sim/windows-sim.zip)
+
+-    
 
 With this simulator you can steer a car around a track for data collection. The
 data collected consists of a .csv and a subfolder with the images taken while
