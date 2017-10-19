@@ -21,13 +21,15 @@ My model model will output a steering angle to an autonomous vehicle.
 
 For the data collection I have used a simulator provided by Udacity:
 
+Here the links to download:
+
 -   [Linux](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip)
 
 -   [macOS](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4594_mac-sim.app/mac-sim.app.zip)
 
 -   [Windows](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4419_windows-sim/windows-sim.zip)
 
--    
+![](writeup_images/simulator.PNG)
 
 With this simulator you can steer a car around a track for data collection. The
 data collected consists of a .csv and a subfolder with the images taken while
@@ -51,6 +53,8 @@ explained in details.
 The Project
 -----------
 
+ 
+
 The goals / steps of this project are the following:
 
 -   Use the simulator to collect data of good driving behavior
@@ -62,7 +66,11 @@ The goals / steps of this project are the following:
     the simulator. The vehicle should remain on the road for an entire loop
     around the track.
 
+    ![](writeup_images/autonomous.png)
+
 -   Summarize the results with a written report
+
+ 
 
 ### Dependencies
 
@@ -116,7 +124,7 @@ Details About Files In This Directory
     values clipped to max/min values. If this occurs, a known fix for this is to
     add "export LANG=en_US.utf8" to the bashrc file.
 
-######      Saving a video of the autonomous agent
+###### Saving a video of the autonomous agent
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ sh
 python drive.py model.h5 run1
@@ -162,7 +170,7 @@ is used by `video.py` to create a chronological video of the agent driving.
 
     Will run the video at 48 FPS. The default FPS is 60.
 
-######      Why create a video
+###### Why create a video
 
 1.  It's been noted the simulator might perform differently based on the
     hardware. So if your model drives succesfully on your machine it might not
@@ -178,9 +186,13 @@ is used by `video.py` to create a chronological video of the agent driving.
     Here you can find my implementation of the Image preprocessing, Design,
     Traing and Validate Convolutional Neural Network.
 
--   `model.ipynb`
+-   `model.h5`
 
     The generated trained model
+
+-   `output.mp4`
+
+    The generated output as a chronological video of the agent driving.
 
 -   `model_partitioned.ipynb`
 
@@ -192,24 +204,21 @@ is used by `video.py` to create a chronological video of the agent driving.
     with the data shuffle. It doesnt train correctly, the loss after first epoch
     stabilize and doesnt go low.
 
- 
-
 -   `data`
 
-    Local data folder **not **synchronized with GitHub.
+    Local data folder **not** synchronized with GitHub.
 
     Here I am storing the data sampled from the simulator.
 
     I have modified the original structure.
 
-    The .csv contains the relative path  ex. :
+    The .csv contains the relative path ex. :
     **run1/center_2017_10_14_00_18_50_634.jpg**
 
     There are now multiple subfolders, each one containing a different sample
     batch:
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
     total 5180
     drwxrwxr-x 2 cristianku cristianku 393216 ott 14 00:22 run1
     drwxrwxr-x 2 cristianku cristianku 266240 ott 14 13:01 run2
@@ -217,20 +226,17 @@ is used by `video.py` to create a chronological video of the agent driving.
     drwxrwxr-x 2 cristianku cristianku 577536 ott 16 13:09 run4
     drwxrwxr-x 2 cristianku cristianku 720896 ott 17 09:11 track1_run1
     drwxrwxr-x 2 cristianku cristianku 323584 ott 18 12:33 run5
-
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     ... and multiple .csv’s:
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
     -rw-rw-r-- 1 cristianku cristianku 295164 ott 14 00:24 run1.csv
     -rw-rw-r-- 1 cristianku cristianku 214413 ott 14 13:02 run2.csv
     -rw-rw-r-- 1 cristianku cristianku 512122 ott 15 21:16 run3.csv
     -rw-rw-r-- 1 cristianku cristianku 441046 ott 16 12:50 run4.csv
     -rw-rw-r-- 1 cristianku cristianku 657245 ott 17 09:13 track1_run1.csv
     -rw-rw-r-- 1 cristianku cristianku 231229 ott 18 12:35 run5.csv5
-
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
      
