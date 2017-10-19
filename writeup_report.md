@@ -1,8 +1,8 @@
 **Behavioral Cloning**
 ======================
 
-Writeup Template
-----------------
+Writeup report
+--------------
 
 ###  
 
@@ -119,6 +119,8 @@ The model was trained and validated on different data sets to ensure that the
 model was not overfitting. The model was tested by running it through the
 simulator and ensuring that the vehicle could stay on the track.
 
+ 
+
 #### 3. Model parameter tuning
 
 The model used an adam optimizer, so the learning rate was not tuned manually .
@@ -129,8 +131,10 @@ The model used an adam optimizer, so the learning rate was not tuned manually .
 
 Training data was chosen to keep the vehicle driving on the road. I used a
 combination of center lane driving, recovering from the left and right sides of
-the road. And I have also used the Track2 to sample data.
-Very important was to train the vehicle to recover from the side to the center.
+the road. And I have also used the Track2 to sample data. Very important was to
+train the vehicle to recover from the side to the center.
+
+ 
 
  
 
@@ -151,19 +155,28 @@ Lets riassume the **data preparation** steps:
 
 -   Image list extraction from csv’s
 
--   Adding recurrent  data ( see below )
+-   Adding recurrent data ( see below )
 
--   Splitting the sample list into Training 80%  and Validation 20%
+-   Splitting the sample list into Training 80% and Validation 20%
 
 -   Resizing the images down to **128x128**
 
 -   Image cropping to eliminate the front of the car and the upper part of the
     image ( cloud, trees... )
 
--   Putting the **Center image** with the steering angle, the **left **image
-    with steering corrected by a + factor ( see in the code ), the **right
-    **image corrected by a -factor ( see in the code ) in a **Pytable for Big
-    Data compatibility**
+-   Putting the **Center image** with the steering angle, the **left** image
+    with steering corrected by a + factor ( see in the code ), the **right**
+    image corrected by a -factor ( see in the code ) in a **Pytable for Big Data
+    compatibility**
+
+    To choose the factor , I have tried many different and it seems that the
+    best fit is with 0.1
+
+    I have also tried to understand what is the best correction by recovering
+    from the side and look at the steering angle ( the average is** 0.03** but
+    it seems to me TOO small, so I have decided for **0.1** ):
+
+![](writeup_images/Screen Shot 2017-10-08 at 23.55.10.png)
 
 -   Augmenting Center /Left/ Right image by flipping horizontally and reverting
     the sign of the steering .
@@ -239,13 +252,11 @@ the track without leaving the road.**
 #### 2. Creation of the Training Set
 
 To capture good driving behavior, I first recorded few laps into different
-batches  ( data folder / run1, run2, run3 ... )
+batches ( data folder / run1, run2, run3 ... )
 
 Here is an example image of center lane driving:
 
-![](writeup_images/center_2017_10_14_00_18_52_926.jpg)
-
- 
+![](writeup_images/center_2017_10_19_15_11_09_579.jpg)
 
 I then recorded the vehicle recovering from the left side and right sides of the
 road back to center so that the vehicle would learn to return to the center of
@@ -274,7 +285,7 @@ would ... For example, here is an image that has then been flipped:
 
  
 
-![](writeup_images/exploring dataset.PNG)
+![](writeup_images/exploring%20dataset.PNG)
 
 I have a lot of train samples, ( please refer to Big Data consideration below )
 
@@ -320,7 +331,6 @@ Batch Size                   : 32
 Duration                     : 0:24:41.647470
 
  .. model saved to model.h5
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -329,7 +339,7 @@ Duration                     : 0:24:41.647470
 
  
 
-![](writeup_images/training stats.PNG)
+![](writeup_images/training%20stats.PNG)
 
  
 
@@ -341,7 +351,7 @@ Duration                     : 0:24:41.647470
 
  
 
-1.  Loading the model from disk:
+-   Loading the model from disk:
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     print (" Loading drive.h5 .......")
@@ -373,7 +383,7 @@ Duration                     : 0:24:41.647470
 
  
 
-1.  Loading test image:
+-   Loading test image:
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     image = cv2.imread('./test_images/center1.jpg')
@@ -381,56 +391,61 @@ Duration                     : 0:24:41.647470
 
  
 
-1.  Check if the images are cropped correctly:
+-   Check if the images are cropped correctly:
 
-![](writeup_images/keras cropping.PNG)
+![](writeup_images/keras%20cropping.PNG)
 
-1.  **First Layer ** - Conv Layer 5x5 , 24 filters  ( To see all the images go
-    please to **model.ipynb **)
+**1 - First Layer**  - Conv Layer 5x5 , 24 filters ( To see all the images go
+please to **model.ipynb** )
 
-![](writeup_images/keras first layer.PNG)
+![](writeup_images/keras%20first%20layer.PNG)
 
-1.  **Second layer** - Conv Layer 5x5 , 36 filters ( To see all the images go
-    please to **model.ipynb **)
+**2 - Second layer** - Conv Layer 5x5 , 36 filters ( To see all the images go
+please to **model.ipynb** )
 
-![](writeup_images/keras second layer.PNG)
+![](writeup_images/keras%20second%20layer.PNG)
 
-1.  **Third Layer **- Conv Layer 5x5 , 48 filters ( To see all the images go
-    please to **model.ipynb **)
+**3 - Third Layer** - Conv Layer 5x5 , 48 filters ( To see all the images go
+please to **model.ipynb** )
 
-![](writeup_images/keras layer 3.PNG)
-
-1.  **4th **Conv Layer 3x3 , 64 filters ( To see all the images go please to
-    **model.ipynb **)
-
-![](writeup_images/keras layer 4.PNG)
-
-1.  **5th** Conv Layer 3x3 , 64 filters ( To see all the images go please to
-    **model.ipynb **)
-
-![](writeup_images/keras layer 5.PNG)
+![](writeup_images/keras%20layer%203.PNG)
 
  
 
-### **​Consideration about Big Data on  GPU machine ( Nvidia GTX 1060 )**
+**              —— I THINK I CAN DROP THE FOLLOWING LAYERS  BECAUSE THEY ARE
+LOOSING INFORMATIONS  -------------**
+
+**4 - 4th** Conv Layer 3x3 , 64 filters ( To see all the images go please to
+**model.ipynb** )
+
+![](writeup_images/keras%20layer%204.PNG)
+
+1.  **5th** Conv Layer 3x3 , 64 filters ( To see all the images go please to
+    **model.ipynb** )
+
+![](writeup_images/keras%20layer%205.PNG)
+
+ 
+
+### **​Consideration about Big Data on GPU machine ( Nvidia GTX 1060 )**
 
 The proposed in Udacity solution was too slow for training a lot of data.
 
-The problem was that the generator was reading every time, every image from
-disk, and preprocessing it again and again.
+The problem was that the generator was reading every time, every single image
+from the disk, and preprocessing it again and again every time. Choosing an SSD
+instead of HDD didnt helped much
 
  
 
-A second solution would be to keep the preprocessed images (64x64 pixels ) in
-memory, but this solution is not scalable in a Big Data future implementation.
-Also in my solution were I have used around 200.000 images , it was also near
-the memory RAM limit.
+A second solution would be to keep the preprocessed **ALL the images (64x64
+pixels ) in memory,** but this solution is not scalable in a Big Data future
+implementation ( because of limited RAM resources).
 
  
 
-So I have decided to try this solution :
+So I have decided to try the following :
 
-#### 1. Introduce the **Pytable**
+#### 1. Store the preprocessed images into **Pytables**
 
 Table definition
 
@@ -443,12 +458,7 @@ py_training_samples   = hdf5_training.create_earray(hdf5_training.root, \
                     shape=( 0,resized_shape, resized_shape, 3),chunkshape=(batch_size*queue_loader_chunk ,resized_shape,resized_shape,3))
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- 
-
-The *preprocess is reading from disk *and writing directly a Pytable on a SSD
-disk:
-
- 
+Image inserting ( I have done this in the **preprocess** phase )
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   for output in data_preprocess(sample_line):
@@ -462,10 +472,10 @@ disk:
         training_steering.append(output[1])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The **[None] **is used to introduce a further dimension , thats the number of
+The **[None]** is used to introduce a further dimension , thats the number of
 images stored.
 
-Here you can see the Structure of **py_training_samples   **:
+Here you can see the Structure of **py_training_samples** :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /training_images (EArray(381744, 128, 128, 3)) ''
@@ -493,13 +503,18 @@ Here you can see the Structure of **py_training_samples   **:
 
  
 
-#### 2. Introduce the **Asynchronous processing**
+#### 2. Adding Multi-threades **asynchronous processing**
 
-So i have thought to build two separate process:
+There are now two different processes:
 
-1 - A process that reads from disk and insert Big Chunks of data , lets day
-64000 images per time, into a Memory buffer ( a python Queue ). I use
-**multiprocessing.Process** class.
+1 - I have designed a **Buffer** , a python **Queue** as a method to pass data
+between the two Asynchronous processes
+
+ 
+
+2 - **The first process** reads from disk and insert big chunk of data , lets
+day 80000 images per time, into a Memory buffer ( a python Queue ). I use
+**multiprocessing.Process** class to do it..
 
 The great thing about Python Queue is that , if we define the **maxsize
 (batch_size \* queue_loader_chunk)**, the put instruction in case the Queue is
@@ -507,24 +522,27 @@ full, will wait until will be some space free.
 
  
 
-2- the second process , that’s the training itself with Keras
+3 - **the second process** , that’s the training itself with Keras
 
  
 
-This split allows to maximize the different CPU cores, while Keras can do it
-with the** workers=n.**
+This structure now allows to maximize the different CPU cores.
+
+ 
 
 Further, using a memory buffer it allows to optimize the data flush from SSD to
 GPU, that need to pass from the memory.
 
  
 
-As I can see from my tests, I have improved the GPU utilization from 40% to 80%
-.
+As I can see from my tests, I have improved the GPU utilization from 40% to
+80-90% .
+
+![](writeup_images/improvements.png)
 
  
 
-#### 3. Threading the Buffering from SSD to memory
+#### 3. Multi-process Queue loader
 
 NOTE: this solution is not implemented in the code because of a unresolved bug,
 see below.
@@ -557,18 +575,24 @@ PART3](https://medium.com/@cristianzantedeschi/deep-learning-training-with-huge-
 
 #### 4. What about shuffling the data ?
 
-Its important to note, that in the solutions before ( Udacity, shuffling the
-entire sample list , not the image array), or the big image array in memory, the
-shuffling was done in the **generator** at the** begin of each epoch**
-
-Because now I am reading data in chunk from disk, the generetor doesnt have all
-the data in hands, but only eventually this big chunk, or , in other words, the
-Python Queue.
+Its important to note, using this solution it is difficult to shuffle all the
+data at each epoch change.
 
  
 
-Because shuffling a Queue is a loss of performance ( very slow ), I had to
-transfer shuffling data into the Queue loader:
+Because now I am reading data in chunk from disk, the **generator** doesnt have
+all the data in hands, but only eventually this big chunk, or , in other words,
+the current state of the Python Queue.
+
+ 
+
+Shuffling a Queue is not a good choice for performance reasons.
+
+ 
+
+So I have decided to put the shuffle in the Queue Loader:
+
+ 
 
 1.  Queue loader reads a Big Chunk from Pytable ( from disk ):
 
@@ -603,7 +627,8 @@ transfer shuffling data into the Queue loader:
 
  
 
-The Big Chunk ( the Queue size ) need **to be big enough**
+The Big Chunk ( the Queue size ) need **to be big enough but not too big, why
+?**
 
 1.  to increase the performance
 
@@ -612,5 +637,5 @@ The Big Chunk ( the Queue size ) need **to be big enough**
 3.  need to shuffle as many data as possible ( to avoid repeating training on
     same data )
 
-    Obiously the best shuffle is done on the entire dataset, but **in this Big
-    Data solution is not possible.**
+Obiously the best shuffle is done on the entire dataset, but **in this Big Data
+solution is not possible.**
