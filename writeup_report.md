@@ -134,7 +134,24 @@ combination of center lane driving, recovering from the left and right sides of
 the road. And I have also used the Track2 to sample data. Very important was to
 train the vehicle to recover from the side to the center.
 
+I have now a lot of images to train with:
+
  
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Starting .... 
+Reading from logfile = /ssd_data/project3/run5.csv
+Reading from logfile = /ssd_data/project3/run3.csv
+Reading from logfile = /ssd_data/project3/run4.csv
+Reading from logfile = /ssd_data/project3/track1_run1.csv
+Reading from logfile = /ssd_data/project3/run7.csv
+Reading from logfile = /ssd_data/project3/run2.csv
+Reading from logfile = /ssd_data/project3/run6.csv
+Reading from logfile = /ssd_data/project3/run1.csv
+
+
+There are 18392 samples in total 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
 
@@ -173,72 +190,13 @@ Lets riassume the **data preparation** steps:
     best fit is with 0.1
 
     I have also tried to understand what is the best correction by recovering
-    from the side and look at the steering angle ( the average is** 0.03** but
-    it seems to me TOO small, so I have decided for **0.1** ):
+    from the side and look at the steering angle ( the average is\*\* 0.03\*\*
+    but it seems to me TOO small, so I have decided for **0.1** ):
 
-![](writeup_images/Screen Shot 2017-10-08 at 23.55.10.png)
+![](writeup_images/Screen%20Shot%202017-10-08%20at%2023.55.10.png)
 
 -   Augmenting Center /Left/ Right image by flipping horizontally and reverting
     the sign of the steering .
-
- 
-
-**I have introduced also a new concept. I have introduced “Recurrent Neural
-Network”,** done lets say by hand preparing multiple previous images on the
-actual steering wheel value:
-
- 
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-samples_list_recurrent = []
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-for i,line in enumerate(samples_list):
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if i% 1000 == 0 and i> 0 : print(".. recurrent data processed {}".format(i))     
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  for ix in range( max(i-1,0), max(i-5,0), -1):  
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      current_steering_angle = line[3]        
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      samples_list_recurrent.append([samples_list[ix][0] ,samples_list[ix][1] ,samples_list[ix][2] ,line[3]])
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- 
-
-The training is done by a batch of 32 and epochs cycle are 10.
-
- 
-
-This is the training result with training loss and validation loss:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Epoch 1/100
-9941/9940 [==============================] - 183s - loss: 0.0179 - val_loss: 0.0114
-Epoch 2/100
-9941/9940 [==============================] - 179s - loss: 0.0115 - val_loss: 0.0098
-Epoch 3/100
-9941/9940 [==============================] - 180s - loss: 0.0108 - val_loss: 0.0093
-Epoch 4/100
-9941/9940 [==============================] - 179s - loss: 0.0445 - val_loss: 0.0315
-Epoch 5/100
-9941/9940 [==============================] - 178s - loss: 0.1237 - val_loss: 0.0685
-Epoch 6/100
-9941/9940 [==============================] - 177s - loss: 0.1808 - val_loss: 0.0705
-Epoch 7/100
-9941/9940 [==============================] - 177s - loss: 1.5884 - val_loss: 0.0752
-Epoch 8/100
-9941/9940 [==============================] - 177s - loss: 0.1018 - val_loss: 0.0664
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
 
@@ -278,6 +236,47 @@ To augment the data sat, I also flipped images and angles thinking that this
 would ... For example, here is an image that has then been flipped:
 
 ![](writeup_images/flipped.jpg)
+
+**I have introduced also a new concept. I have introduced “Recurrent Neural
+Network”,** done lets say by hand preparing multiple previous images on the
+actual steering wheel value:
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+samples_list_recurrent = []
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+for i,line in enumerate(samples_list):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if i% 1000 == 0 and i> 0 : print(".. recurrent data processed {}".format(i))     
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  for ix in range( max(i-1,0), max(i-5,0), -1):  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      current_steering_angle = line[3]        
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      samples_list_recurrent.append([samples_list[ix][0] ,samples_list[ix][1] ,samples_list[ix][2] ,line[3]])
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+So now the training and validation samples after preprocessing and augmenting
+the images :
+
+\#\#\#\#\#\#\#\#\#\#\#\#
+
+insert here the preprocessing output !!!!!!!!!!!!!!
+
+\#\#\#\#\#\#\#\#\#\#\#\#
 
  
 
@@ -395,7 +394,7 @@ Duration                     : 0:24:41.647470
 
 ![](writeup_images/keras%20cropping.PNG)
 
-**1 - First Layer**  - Conv Layer 5x5 , 24 filters ( To see all the images go
+**1 - First Layer** - Conv Layer 5x5 , 24 filters ( To see all the images go
 please to **model.ipynb** )
 
 ![](writeup_images/keras%20first%20layer.PNG)
@@ -412,8 +411,8 @@ please to **model.ipynb** )
 
  
 
-**              —— I THINK I CAN DROP THE FOLLOWING LAYERS  BECAUSE THEY ARE
-LOOSING INFORMATIONS  -------------**
+\*\* —— I THINK I CAN DROP THE FOLLOWING LAYERS BECAUSE THEY ARE LOOSING
+INFORMATIONS -------------\*\*
 
 **4 - 4th** Conv Layer 3x3 , 64 filters ( To see all the images go please to
 **model.ipynb** )

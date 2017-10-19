@@ -190,6 +190,14 @@ is used by `video.py` to create a chronological video of the agent driving.
 
     The generated trained model
 
+-   `writeup_report.md`
+
+    Here I have described step by step my strategies to resolve this Project
+
+-   `writeup_report.pdf`
+
+    Here you can find a summarization report
+
 -   `output.mp4`
 
     The generated output as a chronological video of the agent driving.
