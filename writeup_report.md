@@ -434,7 +434,14 @@ python video.py run1
 
 And the output:
 
-**xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx**
+ 
+
+I have also recorded a video , you can have a look on youtube ( sorry for the
+quality but I had to connect remotely to my home server through Teamviewer ) :
+
+https://youtu.be/xrnyjzzVb08
+
+ 
 
  
 
