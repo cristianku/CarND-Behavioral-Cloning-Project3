@@ -64,105 +64,6 @@ contains comments to explain how the code works.
 
  
 
-**Model Architecture and Training Strategy**
-============================================
-
-#### 1. An appropriate model architecture has been employed
-
-My model consists of a convolution neural network **“Nvidia like”** with 3x3 but
-without the last 5x5 filters
-
-See in the section **Trained model exploration** below a visual explanation why
-I decided to drop the last two layers
-
-The model includes ELU layers to introduce nonlinearity, and the data is
-normalized in the model using a Keras lambda layer (lambda x: x/127.5 - 1 ).
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-cropping (Cropping2D)        (None, 73, 128, 3)        0         
-_________________________________________________________________
-lambda_1 (Lambda)            (None, 73, 128, 3)        0         
-_________________________________________________________________
-Conv1 (Conv2D)               (None, 35, 62, 24)        1824      
-_________________________________________________________________
-Conv2 (Conv2D)               (None, 16, 29, 36)        21636     
-_________________________________________________________________
-Conv3 (Conv2D)               (None, 6, 13, 48)         43248     
-_________________________________________________________________
-Conv4 (Conv2D)               (None, 4, 11, 64)         27712     
-_________________________________________________________________
-Conv5 (Conv2D)               (None, 2, 9, 64)          36928     
-_________________________________________________________________
-dropout_1 (Dropout)          (None, 2, 9, 64)          0         
-_________________________________________________________________
-flatten_1 (Flatten)          (None, 1152)              0         
-_________________________________________________________________
-dense_1 (Dense)              (None, 100)               115300    
-_________________________________________________________________
-dropout_2 (Dropout)          (None, 100)               0         
-_________________________________________________________________
-dense_2 (Dense)              (None, 50)                5050      
-_________________________________________________________________
-dense_3 (Dense)              (None, 10)                510       
-_________________________________________________________________
-dense_4 (Dense)              (None, 1)                 11        
-=================================================================
-Total params: 252,219
-Trainable params: 252,219
-Non-trainable params: 0
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- 
-
-#### 2. Attempts to reduce overfitting in the model
-
-The model contains **dropout layers** in order to reduce overfitting (after the
-Convolutional Network , after the Flatten layer).
-
-The model was trained and validated on different data sets to ensure that the
-model was not overfitting. The model was tested by running it through the
-simulator and ensuring that the vehicle could stay on the track.
-
- 
-
-#### 3. Model parameter tuning
-
-The model used an **adam optimizer**, so the learning rate was not tuned
-manually .
-
- 
-
-#### 4. Appropriate training data
-
-Training data was chosen to keep the vehicle driving on the road. I used a
-combination of center lane driving, recovering from the left and right sides of
-the road. And I have also used the **Track2** to sample data.
-
-Very important was to t**rain the vehicle to recover** from the side to the
-center.
-
-I have now a lot of images to train with:
-
- 
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Starting .... 
-Reading from logfile = /ssd_data/project3/run5.csv
-Reading from logfile = /ssd_data/project3/run3.csv
-Reading from logfile = /ssd_data/project3/run4.csv
-Reading from logfile = /ssd_data/project3/track1_run1.csv
-Reading from logfile = /ssd_data/project3/run7.csv
-Reading from logfile = /ssd_data/project3/run2.csv
-Reading from logfile = /ssd_data/project3/run6.csv
-Reading from logfile = /ssd_data/project3/run1.csv
-
-
-There are 18392 samples in total 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
  
 
 **Model Architecture and Training Strategy**
@@ -185,6 +86,41 @@ I decided to drop the last two layers
 
 The model includes ELU layers to introduce nonlinearity, and the data is
 normalized in the model using a Keras lambda layer (lambda x: x/127.5 - 1 ).
+
+\________________________________________________________________\_  
+Layer (type)                 Output Shape              Param \#  
+=================================================================  
+cropping (Cropping2D)        (None, 73, 128, 3)        0  
+\________________________________________________________________\_  
+lambda_1 (Lambda)            (None, 73, 128, 3)        0  
+\________________________________________________________________\_  
+Conv1 (Conv2D)               (None, 35, 62, 24)        1824  
+\________________________________________________________________\_  
+Conv2 (Conv2D)               (None, 16, 29, 36)        21636  
+\________________________________________________________________\_  
+Conv3 (Conv2D)               (None, 6, 13, 48)         43248  
+\________________________________________________________________\_  
+Conv4 (Conv2D)               (None, 4, 11, 64)         27712  
+\________________________________________________________________\_  
+Conv5 (Conv2D)               (None, 2, 9, 64)          36928  
+\________________________________________________________________\_  
+dropout_1 (Dropout)          (None, 2, 9, 64)          0  
+\________________________________________________________________\_  
+flatten_1 (Flatten)          (None, 1152)              0  
+\________________________________________________________________\_  
+dense_1 (Dense)              (None, 100)               115300  
+\________________________________________________________________\_  
+dropout_2 (Dropout)          (None, 100)               0  
+\________________________________________________________________\_  
+dense_2 (Dense)              (None, 50)                5050  
+\________________________________________________________________\_  
+dense_3 (Dense)              (None, 10)                510  
+\________________________________________________________________\_  
+dense_4 (Dense)              (None, 1)                 11  
+=================================================================  
+Total params: 252,219  
+Trainable params: 252,219  
+Non-trainable params: 0
 
  
 
@@ -273,7 +209,7 @@ I put more concentration on the Data Preparation:
 
  
 
-#### 2. Recurrent Neural Network
+#### 4. Recurrent Neural Network
 
 **I have tried to introduced a recurrent pattern recognition**
 
@@ -308,7 +244,7 @@ for i,line in enumerate(samples_list):
 
  
 
-#### 3. Dataset exploration
+#### 5. Training and Validation Samples exploration
 
 Initially I had the following number of images coming from the **simulator
 sampling phase:**
@@ -329,6 +265,14 @@ There are 18392 samples in total
 
  
 
+Adding the recurrent images:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Total samples including recurrent 91946
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
 And **after preprocessing and augmenting:**
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -338,6 +282,8 @@ Total validation samples 128x128 after augmentation and preprocessing : 95442
 ... completed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ 
+
 *Visual representation:*
 
 ![](writeup_images/exploring%20dataset.PNG)
@@ -345,6 +291,11 @@ Total validation samples 128x128 after augmentation and preprocessing : 95442
  
 
 #### 4. Training
+
+The model used an **adam optimizer**, so the learning rate was not tuned
+manually
+
+ 
 
 Here you can see the training statistics:
 
@@ -472,17 +423,19 @@ please to **model.ipynb** )
 
  
 
-**Testing the model with the simulator:**
-=========================================
+**Testing the model in the simulator:**
+=======================================
 
  
 
-The following command will load the trained model and use the model to make
-predictions on individual images in real-time and send the predicted angle back
-to the server via a websocket connection.
+The following command will load the trained **model.h5** and use the model to
+make predictions on individual images in real-time and send the predicted angle
+back to the server via a websocket connection.
 
-I will also take a series a picture in **run1** that will be used later to
-create a video
+ 
+
+It will also take a series a picture into **run1** folder that will be used
+later to create a video
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    python drive.py model.h5 run1
@@ -498,6 +451,10 @@ Creating a videoclip:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 python video.py run1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+And the output:
 
  
 
