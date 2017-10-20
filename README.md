@@ -198,7 +198,7 @@ is used by `video.py` to create a chronological video of the agent driving.
 
     Here I have described step by step my strategies to resolve this Project
 
--   `output.mp4`
+-   `video.mp4`
 
     The generated output as a chronological video of the agent driving.
 
