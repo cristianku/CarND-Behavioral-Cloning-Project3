@@ -314,9 +314,34 @@ the epoch 4:**
 
  
 
-*I will repeat the training with a limit of 4 epochs*
+**I will repeat the training with a limit of 4 epochs**
 
  
+
+Epoch 1/4  
+13979/13978 [==============================] - 201s - loss: 0.0209 - val_loss:
+0.0143  
+Epoch 2/4  
+13979/13978 [==============================] - 168s - loss: 0.0175 - val_loss:
+0.0136  
+Epoch 3/4  
+13979/13978 [==============================] - 175s - loss: 0.0167 - val_loss:
+0.0139  
+Epoch 4/4  
+13979/13978 [==============================] - 170s - loss: 0.0171 - val_loss:
+0.0128  
+  
+Total number of train samples: 447312 ( shape 128x128)  
+  
+Batch Size                   : 32  
+  
+Duration                     : 0:11:58.673952  
+  
+.. model saved to model.h5
+
+ 
+
+![](writeup_images/second training.PNG)
 
  
 
