@@ -87,40 +87,7 @@ I decided to drop the last two layers
 The model includes ELU layers to introduce nonlinearity, and the data is
 normalized in the model using a Keras lambda layer (lambda x: x/127.5 - 1 ).
 
-\________________________________________________________________\_  
-Layer (type)                 Output Shape              Param \#  
-=================================================================  
-cropping (Cropping2D)        (None, 73, 128, 3)        0  
-\________________________________________________________________\_  
-lambda_1 (Lambda)            (None, 73, 128, 3)        0  
-\________________________________________________________________\_  
-Conv1 (Conv2D)               (None, 35, 62, 24)        1824  
-\________________________________________________________________\_  
-Conv2 (Conv2D)               (None, 16, 29, 36)        21636  
-\________________________________________________________________\_  
-Conv3 (Conv2D)               (None, 6, 13, 48)         43248  
-\________________________________________________________________\_  
-Conv4 (Conv2D)               (None, 4, 11, 64)         27712  
-\________________________________________________________________\_  
-Conv5 (Conv2D)               (None, 2, 9, 64)          36928  
-\________________________________________________________________\_  
-dropout_1 (Dropout)          (None, 2, 9, 64)          0  
-\________________________________________________________________\_  
-flatten_1 (Flatten)          (None, 1152)              0  
-\________________________________________________________________\_  
-dense_1 (Dense)              (None, 100)               115300  
-\________________________________________________________________\_  
-dropout_2 (Dropout)          (None, 100)               0  
-\________________________________________________________________\_  
-dense_2 (Dense)              (None, 50)                5050  
-\________________________________________________________________\_  
-dense_3 (Dense)              (None, 10)                510  
-\________________________________________________________________\_  
-dense_4 (Dense)              (None, 1)                 11  
-=================================================================  
-Total params: 252,219  
-Trainable params: 252,219  
-Non-trainable params: 0
+![](writeup_images/model%20definition.PNG)
 
  
 
@@ -276,9 +243,9 @@ Total samples including recurrent 91946
 And **after preprocessing and augmenting:**
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Total training samples 128x128 after augmentation and preprocessing : 381744
+Total training samples 128x128 after augmentation and preprocessing : 441336 
 
-Total validation samples 128x128 after augmentation and preprocessing : 95442
+Total validation samples 128x128 after augmentation and preprocessing : 110340 
 ... completed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -297,48 +264,84 @@ manually
 
  
 
-Here you can see the training statistics:
+Here you can see the training result:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Epoch 1/10
-11930/11929 [==============================] - 165s - loss: 0.0262 - val_loss: 0.0150
-Epoch 2/10
-11930/11929 [==============================] - 148s - loss: 0.0220 - val_loss: 0.0158
-Epoch 3/10
-11930/11929 [==============================] - 151s - loss: 0.0233 - val_loss: 0.0176
-Epoch 4/10
-11930/11929 [==============================] - 145s - loss: 0.0232 - val_loss: 0.0147
-Epoch 5/10
-11930/11929 [==============================] - 145s - loss: 0.0241 - val_loss: 0.0186
-Epoch 6/10
-11930/11929 [==============================] - 145s - loss: 0.0254 - val_loss: 0.0211
-Epoch 7/10
-11930/11929 [==============================] - 145s - loss: 0.0275 - val_loss: 0.0178
-Epoch 8/10
-11930/11929 [==============================] - 144s - loss: 0.3627 - val_loss: 0.0790
-Epoch 9/10
-11930/11929 [==============================] - 144s - loss: 0.0808 - val_loss: 0.0789
-Epoch 10/10
-11930/11929 [==============================] - 144s - loss: 0.3662 - val_loss: 0.0794
+Epoch 1/10  
+13792/13791 [==============================] - 341s - loss: 0.0205 - val_loss:
+0.0145  
+Epoch 2/10  
+13792/13791 [==============================] - 323s - loss: 0.0169 - val_loss:
+0.0140  
+Epoch 3/10  
+13792/13791 [==============================] - 331s - loss: 0.0159 - val_loss:
+0.0111  
+Epoch 4/10  
+13792/13791 [==============================] - 325s - loss: 0.0156 - val_loss:
+0.0106  
+Epoch 5/10  
+13792/13791 [==============================] - 341s - loss: 0.0195 - val_loss:
+0.0124  
+Epoch 6/10  
+13792/13791 [==============================] - 360s - loss: 0.0164 - val_loss:
+0.0107  
+Epoch 7/10  
+13792/13791 [==============================] - 344s - loss: 0.0183 - val_loss:
+0.0116  
+Epoch 8/10  
+13792/13791 [==============================] - 311s - loss: 0.0165 - val_loss:
+0.0123  
+Epoch 9/10  
+13792/13791 [==============================] - 362s - loss: 0.0166 - val_loss:
+0.0128  
+Epoch 10/10  
+13792/13791 [==============================] - 343s - loss: 0.0177 - val_loss:
+0.0118
 
-Total number of train samples: 381744 ( shape 128x128)
+Total number of train samples: 441336 ( shape 128x128)
 
-Batch Size                   : 32
+Batch Size : 32
 
-Duration                     : 0:24:41.647470
+Duration : 0:56:31.540967
 
- .. model saved to model.h5
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. model saved to model.h5
 
- 
-
-**The image below shows, that we need less than 10 epochs:**
+**The image below shows, that we need less than 10 epochs, the best fit is at
+the epoch 4:**
 
  
 
 ![](writeup_images/training%20stats.PNG)
 
-#### .
+ 
+
+**I will repeat the training with a limit of 4 epochs**
+
+ 
+
+Epoch 1/4  
+13979/13978 [==============================] - 201s - loss: 0.0209 - val_loss:
+0.0143  
+Epoch 2/4  
+13979/13978 [==============================] - 168s - loss: 0.0175 - val_loss:
+0.0136  
+Epoch 3/4  
+13979/13978 [==============================] - 175s - loss: 0.0167 - val_loss:
+0.0139  
+Epoch 4/4  
+13979/13978 [==============================] - 170s - loss: 0.0171 - val_loss:
+0.0128  
+  
+Total number of train samples: 447312 ( shape 128x128)  
+  
+Batch Size                   : 32  
+  
+Duration                     : 0:11:58.673952  
+  
+.. model saved to model.h5
+
+ 
+
+![](writeup_images/second training.PNG)
 
  
 
@@ -454,7 +457,14 @@ python video.py run1
 
  
 
-And the output:
+And the output: **video.mp4**
+
+ 
+
+I have also recorded a video , you can have a look on youtube ( sorry for the
+quality but I had to connect remotely to my home server through Teamviewer ) :
+
+**https://youtu.be/xrnyjzzVb08**
 
  
 
@@ -613,7 +623,7 @@ PART3](https://medium.com/@cristianzantedeschi/deep-learning-training-with-huge-
 #### 5. What about shuffling the data ?
 
 Its important to note, using this solution it is difficult to *shuffle all the
-data *at each epoch change.
+data* at each epoch change.
 
  
 
