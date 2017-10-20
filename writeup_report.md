@@ -2,7 +2,6 @@
 ======================
 
 Writeup report
---------------
 
 ###  
 
@@ -10,13 +9,13 @@ Writeup report
 
 The goals / steps of this project are the following:
 
--   Use the simulator to collect data of good driving behavior
+-   Use the simulator to **collect data** of *good driving behavior*
 
--   Design, train and validate a model that predicts a steering angle from image
-    data
+-   **Design**, **train** and **validate** a model that *predicts a steering
+    angle* from image data
 
--   Use the model to drive the vehicle autonomously around the first track in
-    the simulator. The vehicle should remain on the road for an entire loop
+-   Use the **model to drive the vehicle autonomously** around the first track
+    in the simulator. The vehicle should remain on the road for an entire loop
     around the track.
 
     ![](writeup_images/autonomous.png)
@@ -25,24 +24,26 @@ The goals / steps of this project are the following:
 
  
 
-Rubric Points
--------------
+**Important points to pass the project**
+========================================
 
 #### 1. Required files submission:
 
 My project includes the following files:
 
--   model.py containing the script to create and train the model
+-   **model.ipynb** containing the script to create and train the model
 
--   drive.py for driving the car in autonomous mode
+-   **model.pdf** containing the executed script model.ipynb
 
--   model.h5 containing a trained convolution neural network
+-   **drive.py** for driving the car in autonomous mode
 
--   writeup_report.md or writeup_report.pdf summarizing the results
+-   **model.h5** containing a trained convolution neural network
+
+-   **writeup_report.md** summarizing the results
 
  
 
-#### 2. Submission includes functional code
+#### 2. Testing the model on the road
 
 Using the Udacity provided simulator and my drive.py file, the car can be driven
 autonomously around the track by executing
@@ -53,92 +54,20 @@ python drive.py model.h5
 
  
 
-#### 3. Submission code is usable and readable
+#### 3. Code readability and clearness
 
-The model.py file contains the code for training and saving the convolution
-neural network. The file shows the pipeline I used for training and validating
-the model, and it contains comments to explain how the code works.
+The **model.ipynb** file contains the code for training and saving the
+convolution neural network.
 
- 
-
-### Model Architecture and Training Strategy
-
-#### 1. An appropriate model architecture has been employed
-
-My model consists of a convolution neural network **“Nvidia like”** with 3x3 and
-5x5 filter sizes
-
-The model includes ELU layers to introduce nonlinearity, and the data is
-normalized in the model using a Keras lambda layer (lambda x: x/127.5 - 1 ).
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-cropping (Cropping2D)        (None, 73, 128, 3)        0         
-_________________________________________________________________
-lambda_1 (Lambda)            (None, 73, 128, 3)        0         
-_________________________________________________________________
-Conv1 (Conv2D)               (None, 35, 62, 24)        1824      
-_________________________________________________________________
-Conv2 (Conv2D)               (None, 16, 29, 36)        21636     
-_________________________________________________________________
-Conv3 (Conv2D)               (None, 6, 13, 48)         43248     
-_________________________________________________________________
-Conv4 (Conv2D)               (None, 4, 11, 64)         27712     
-_________________________________________________________________
-Conv5 (Conv2D)               (None, 2, 9, 64)          36928     
-_________________________________________________________________
-dropout_1 (Dropout)          (None, 2, 9, 64)          0         
-_________________________________________________________________
-flatten_1 (Flatten)          (None, 1152)              0         
-_________________________________________________________________
-dense_1 (Dense)              (None, 100)               115300    
-_________________________________________________________________
-dropout_2 (Dropout)          (None, 100)               0         
-_________________________________________________________________
-dense_2 (Dense)              (None, 50)                5050      
-_________________________________________________________________
-dense_3 (Dense)              (None, 10)                510       
-_________________________________________________________________
-dense_4 (Dense)              (None, 1)                 11        
-=================================================================
-Total params: 252,219
-Trainable params: 252,219
-Non-trainable params: 0
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- 
-
-#### 2. Attempts to reduce overfitting in the model
-
-The model contains dropout layers in order to reduce overfitting (after the
-Convolutional Network , after the Flatten layer).
-
-The model was trained and validated on different data sets to ensure that the
-model was not overfitting. The model was tested by running it through the
-simulator and ensuring that the vehicle could stay on the track.
-
- 
-
-#### 3. Model parameter tuning
-
-The model used an adam optimizer, so the learning rate was not tuned manually .
-
- 
-
-#### 4. Appropriate training data
-
-Training data was chosen to keep the vehicle driving on the road. I used a
-combination of center lane driving, recovering from the left and right sides of
-the road. And I have also used the Track2 to sample data. Very important was to
-train the vehicle to recover from the side to the center.
+The file shows the pipeline I used for training and validating the model, and it
+contains comments to explain how the code works.
 
  
 
  
 
-### Model Architecture and Training Strategy
+**Model Architecture and Training Strategy**
+============================================
 
  
 
@@ -149,9 +78,99 @@ Convolutional Neural Network, and to fine tune it.
 
  
 
-I have expecially concentrated on the Data Preparation.
+My model consists of a convolution neural network **“Nvidia like”** with 3x3 but
+without the last 5x5 filters
 
-Lets riassume the **data preparation** steps:
+See in the section **Trained model exploration** below a visual explanation why
+I decided to drop the last two layers
+
+The model includes ELU layers to introduce nonlinearity, and the data is
+normalized in the model using a Keras lambda layer (lambda x: x/127.5 - 1 ).
+
+\________________________________________________________________\_  
+Layer (type)                 Output Shape              Param \#  
+=================================================================  
+cropping (Cropping2D)        (None, 73, 128, 3)        0  
+\________________________________________________________________\_  
+lambda_1 (Lambda)            (None, 73, 128, 3)        0  
+\________________________________________________________________\_  
+Conv1 (Conv2D)               (None, 35, 62, 24)        1824  
+\________________________________________________________________\_  
+Conv2 (Conv2D)               (None, 16, 29, 36)        21636  
+\________________________________________________________________\_  
+Conv3 (Conv2D)               (None, 6, 13, 48)         43248  
+\________________________________________________________________\_  
+Conv4 (Conv2D)               (None, 4, 11, 64)         27712  
+\________________________________________________________________\_  
+Conv5 (Conv2D)               (None, 2, 9, 64)          36928  
+\________________________________________________________________\_  
+dropout_1 (Dropout)          (None, 2, 9, 64)          0  
+\________________________________________________________________\_  
+flatten_1 (Flatten)          (None, 1152)              0  
+\________________________________________________________________\_  
+dense_1 (Dense)              (None, 100)               115300  
+\________________________________________________________________\_  
+dropout_2 (Dropout)          (None, 100)               0  
+\________________________________________________________________\_  
+dense_2 (Dense)              (None, 50)                5050  
+\________________________________________________________________\_  
+dense_3 (Dense)              (None, 10)                510  
+\________________________________________________________________\_  
+dense_4 (Dense)              (None, 1)                 11  
+=================================================================  
+Total params: 252,219  
+Trainable params: 252,219  
+Non-trainable params: 0
+
+ 
+
+#### 2. Attempts to reduce overfitting in the model
+
+-   The model contains **dropout layers** in order to reduce overfitting (after
+    the Convolutional Network , after the Flatten layer).
+
+-   The model **was trained and validated on different data sets** to ensure
+    that the model was not overfitting.
+
+-   The model **was tested by running it through the simulator** and *ensuring
+    that the vehicle could stay on the track*
+
+ 
+
+#### 3. Dataset creation
+
+I have recorded using the simulator a **good driving behavior.**
+
+I have recorded different laps into different recordings ( data folder / run1,
+run2, run3 ... )
+
+Here is an example image of center lane driving:
+
+![](writeup_images/center_2017_10_19_15_11_09_579.jpg)
+
+I then recorded the vehicle **recovering from the left side and right side**s
+
+of the road back to center so that the vehicle would learn
+
+to return to the center of the lane:
+
+ 
+
+![](writeup_images/center_2017_10_19_15_11_06_047.jpg)
+
+![](writeup_images/center_2017_10_19_15_11_07_780.jpg)
+
+![](writeup_images/center_2017_10_19_15_11_09_579.jpg)
+
+ 
+
+Then I repeated this process on **track two** in order to get more data points.
+
+ 
+
+#### 3. Data preprocessing
+
+I put more concentration on the Data Preparation:
 
 -   Image list extraction from csv’s
 
@@ -164,28 +183,38 @@ Lets riassume the **data preparation** steps:
 -   Image cropping to eliminate the front of the car and the upper part of the
     image ( cloud, trees... )
 
--   Putting the **Center image** with the steering angle, the **left** image
-    with steering corrected by a + factor ( see in the code ), the **right**
-    image corrected by a -factor ( see in the code ) in a **Pytable for Big Data
-    compatibility**
+-   Using also the left and right images with a corrected steering angle:
+
+    -   **left** image with steering corrected by a **+** factor ( see in the
+        code ),
+
+    -   **right** image corrected by a **-** factor ( see in the code )
 
     To choose the factor , I have tried many different and it seems that the
     best fit is with 0.1
 
     I have also tried to understand what is the best correction by recovering
-    from the side and look at the steering angle ( the average is** 0.03** but
-    it seems to me TOO small, so I have decided for **0.1** ):
+    from the side and look at the steering angle ( the average is\*\* 0.03\*\*
+    but it seems to me TOO small, so I have decided for **0.1** ):
 
-![](writeup_images/Screen Shot 2017-10-08 at 23.55.10.png)
+    ![](writeup_images/Screen%20Shot%202017-10-08%20at%2023.55.10.png)
+
+-   Using **Pytable**s\*\* for Big Data compatibility \*\* ( see the last
+    section below )
 
 -   Augmenting Center /Left/ Right image by flipping horizontally and reverting
     the sign of the steering .
 
  
 
-**I have introduced also a new concept. I have introduced “Recurrent Neural
-Network”,** done lets say by hand preparing multiple previous images on the
-actual steering wheel value:
+ 
+
+#### 4. Recurrent Neural Network
+
+**I have tried to introduced a recurrent pattern recognition**
+
+In the preparation phase I have added to **the actual steering angle** multiple
+previous images :
 
  
 
@@ -215,81 +244,36 @@ for i,line in enumerate(samples_list):
 
  
 
-The training is done by a batch of 32 and epochs cycle are 10.
+#### 5. Training and Validation Samples exploration
 
- 
-
-This is the training result with training loss and validation loss:
+Initially I had the following number of images coming from the **simulator
+sampling phase:**
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Epoch 1/100
-9941/9940 [==============================] - 183s - loss: 0.0179 - val_loss: 0.0114
-Epoch 2/100
-9941/9940 [==============================] - 179s - loss: 0.0115 - val_loss: 0.0098
-Epoch 3/100
-9941/9940 [==============================] - 180s - loss: 0.0108 - val_loss: 0.0093
-Epoch 4/100
-9941/9940 [==============================] - 179s - loss: 0.0445 - val_loss: 0.0315
-Epoch 5/100
-9941/9940 [==============================] - 178s - loss: 0.1237 - val_loss: 0.0685
-Epoch 6/100
-9941/9940 [==============================] - 177s - loss: 0.1808 - val_loss: 0.0705
-Epoch 7/100
-9941/9940 [==============================] - 177s - loss: 1.5884 - val_loss: 0.0752
-Epoch 8/100
-9941/9940 [==============================] - 177s - loss: 0.1018 - val_loss: 0.0664
+Reading from logfile = /ssd_data/project3/run5.csv
+Reading from logfile = /ssd_data/project3/run3.csv
+Reading from logfile = /ssd_data/project3/run4.csv
+Reading from logfile = /ssd_data/project3/track1_run1.csv
+Reading from logfile = /ssd_data/project3/run7.csv
+Reading from logfile = /ssd_data/project3/run2.csv
+Reading from logfile = /ssd_data/project3/run6.csv
+Reading from logfile = /ssd_data/project3/run1.csv
+
+
+There are 18392 samples in total 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
 
- 
+Adding the recurrent images:
 
-**At the end of the process, the vehicle is able to drive autonomously around
-the track without leaving the road.**
-
- 
-
-#### 2. Creation of the Training Set
-
-To capture good driving behavior, I first recorded few laps into different
-batches ( data folder / run1, run2, run3 ... )
-
-Here is an example image of center lane driving:
-
-![](writeup_images/center_2017_10_19_15_11_09_579.jpg)
-
-I then recorded the vehicle recovering from the left side and right sides of the
-road back to center so that the vehicle would learn to return to the center of
-the lane:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Total samples including recurrent 91946
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
 
-![](writeup_images/center_2017_10_19_15_11_06_047.jpg)
-
-![](writeup_images/center_2017_10_19_15_11_07_780.jpg)
-
-![](writeup_images/center_2017_10_19_15_11_09_579.jpg)
-
- 
-
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this
-would ... For example, here is an image that has then been flipped:
-
-![](writeup_images/flipped.jpg)
-
- 
-
-#### 3. Dataset exploration
-
- 
-
-![](writeup_images/exploring%20dataset.PNG)
-
-I have a lot of train samples, ( please refer to Big Data consideration below )
-
- 
+And **after preprocessing and augmenting:**
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Total training samples 128x128 after augmentation and preprocessing : 381744
@@ -298,7 +282,20 @@ Total validation samples 128x128 after augmentation and preprocessing : 95442
 ... completed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ 
+
+*Visual representation:*
+
+![](writeup_images/exploring%20dataset.PNG)
+
+ 
+
 #### 4. Training
+
+The model used an **adam optimizer**, so the learning rate was not tuned
+manually
+
+ 
 
 Here you can see the training statistics:
 
@@ -341,13 +338,12 @@ Duration                     : 0:24:41.647470
 
 ![](writeup_images/training%20stats.PNG)
 
- 
+#### .
 
  
 
- 
-
-### **Trained model exploration**
+**Trained model exploration**
+=============================
 
  
 
@@ -395,7 +391,7 @@ Duration                     : 0:24:41.647470
 
 ![](writeup_images/keras%20cropping.PNG)
 
-**1 - First Layer**  - Conv Layer 5x5 , 24 filters ( To see all the images go
+**1 - First Layer** - Conv Layer 5x5 , 24 filters ( To see all the images go
 please to **model.ipynb** )
 
 ![](writeup_images/keras%20first%20layer.PNG)
@@ -412,8 +408,8 @@ please to **model.ipynb** )
 
  
 
-**              —— I THINK I CAN DROP THE FOLLOWING LAYERS  BECAUSE THEY ARE
-LOOSING INFORMATIONS  -------------**
+**\*\* —— THERE LAYERS HAS BEEN DROPPED BECAUSE THEY ARE LOOSING INFORMATIONS
+-------------\*\***
 
 **4 - 4th** Conv Layer 3x3 , 64 filters ( To see all the images go please to
 **model.ipynb** )
@@ -427,7 +423,45 @@ LOOSING INFORMATIONS  -------------**
 
  
 
-### **​Consideration about Big Data on GPU machine ( Nvidia GTX 1060 )**
+**Testing the model in the simulator:**
+=======================================
+
+ 
+
+The following command will load the trained **model.h5** and use the model to
+make predictions on individual images in real-time and send the predicted angle
+back to the server via a websocket connection.
+
+ 
+
+It will also take a series a picture into **run1** folder that will be used
+later to create a video
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   python drive.py model.h5 run1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+![](writeup_images/autonomous.png)
+
+**​​**
+====
+
+Creating a videoclip:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+python video.py run1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+And the output:
+
+ 
+
+ 
+
+**Consideration about Big Data on GPU machine ( Nvidia GTX 1060 )**
+===================================================================
 
 The proposed in Udacity solution was too slow for training a lot of data.
 
@@ -443,7 +477,7 @@ implementation ( because of limited RAM resources).
 
  
 
-So I have decided to try the following :
+**So here instead my solution:**
 
 #### 1. Store the preprocessed images into **Pytables**
 
@@ -458,6 +492,8 @@ py_training_samples   = hdf5_training.create_earray(hdf5_training.root, \
                     shape=( 0,resized_shape, resized_shape, 3),chunkshape=(batch_size*queue_loader_chunk ,resized_shape,resized_shape,3))
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ 
+
 Image inserting ( I have done this in the **preprocess** phase )
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -471,6 +507,8 @@ Image inserting ( I have done this in the **preprocess** phase )
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         training_steering.append(output[1])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
 
 The **[None]** is used to introduce a further dimension , thats the number of
 images stored.
@@ -505,8 +543,6 @@ Here you can see the Structure of **py_training_samples** :
 
 #### 2. Adding Multi-threades **asynchronous processing**
 
-There are now two different processes:
-
 1 - I have designed a **Buffer** , a python **Queue** as a method to pass data
 between the two Asynchronous processes
 
@@ -526,12 +562,14 @@ full, will wait until will be some space free.
 
  
 
+#### 3. Summary
+
 This structure now allows to maximize the different CPU cores.
 
  
 
 Further, using a memory buffer it allows to optimize the data flush from SSD to
-GPU, that need to pass from the memory.
+GPU.
 
  
 
@@ -542,10 +580,10 @@ As I can see from my tests, I have improved the GPU utilization from 40% to
 
  
 
-#### 3. Multi-process Queue loader
+#### 4. Multi-process Queue loader
 
-NOTE: this solution is not implemented in the code because of a unresolved bug,
-see below.
+**NOTE: this solution is not implemented in the cod**e because of a unresolved
+bug, see below.
 
 Here I have tried to go further and build a multiple thread process that loads
 data into the Memory.
@@ -557,8 +595,7 @@ you can have a look into
 
  
 
-Here I tried to go further If you are interested in other details, you can read
-my Stories on Medium:
+If interested in more informations, you can read my Stories on Medium:
 
  
 
@@ -573,28 +610,27 @@ PART3](https://medium.com/@cristianzantedeschi/deep-learning-training-with-huge-
 
  
 
-#### 4. What about shuffling the data ?
+#### 5. What about shuffling the data ?
 
-Its important to note, using this solution it is difficult to shuffle all the
-data at each epoch change.
+Its important to note, using this solution it is difficult to *shuffle all the
+data *at each epoch change.
 
  
 
 Because now I am reading data in chunk from disk, the **generator** doesnt have
-all the data in hands, but only eventually this big chunk, or , in other words,
-the current state of the Python Queue.
+all the data in hands, but only eventually this big chunk.
 
  
 
-Shuffling a Queue is not a good choice for performance reasons.
+**Shuffling a Queue** is not a good choice for performance reasons.
 
  
 
-So I have decided to put the shuffle in the Queue Loader:
+So I have decided to put the **shuffle in the Queue Loader:**
 
  
 
-1.  Queue loader reads a Big Chunk from Pytable ( from disk ):
+1.  *Queue loader reads a Big Chunk from Pytable ( from disk ):*
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     chunk_batch_samples = samples[offset:offset+step]
@@ -627,7 +663,9 @@ So I have decided to put the shuffle in the Queue Loader:
 
  
 
-The Big Chunk ( the Queue size ) need **to be big enough but not too big, why
+#### 5. Considerations about the chunk size
+
+The big Chunk ( the Queue size ) need **to be big enough but not too big, why
 ?**
 
 1.  to increase the performance

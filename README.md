@@ -186,9 +186,17 @@ is used by `video.py` to create a chronological video of the agent driving.
     Here you can find my implementation of the Image preprocessing, Design,
     Traing and Validate Convolutional Neural Network.
 
+-   `model.pdf`
+
+    An already executed version of model.ipynb
+
 -   `model.h5`
 
     The generated trained model
+
+-   `writeup_report.md`
+
+    Here I have described step by step my strategies to resolve this Project
 
 -   `output.mp4`
 
